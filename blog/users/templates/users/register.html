@@ -1,0 +1,68 @@
+{% include "partials/dash-top.html" %}
+
+<div class="page">
+    {% if register_form.errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;">
+
+  
+        {% for field in register_form %}
+            {% for error in field.errors %}
+                {{ error }}
+                
+                <br>
+            {% endfor %}
+        {% endfor %}
+        <br>
+
+  
+
+  
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+<div class="registerpage container d-flex justify-content-center align-items-center">
+    <form class="col-4" method="POST">
+        {% csrf_token %}
+        <div class="mb-3 h2">
+            Register
+        </div>
+        <div class="mb-3">
+          <label for="Email1" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="username">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="Fname" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="Fname" aria-describedby="Name" name="first name">
+            
+        </div>
+        <div class="mb-3">
+            <label for="Lname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="Lname" name="last name">
+            
+        </div>
+        <div class="mb-3">
+          <label for="Password1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="Password1" name="password1">
+        </div>
+        <div class="mb-3">
+            <label for="Password2" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="Password1" name="password2">
+          </div>
+          <div class="form-link">
+            <a href="/users/login/">Already have an account? Log in </a>
+        </div>
+        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+      </form>
+</div>
+</div>
+
+
+{% include "partials/dash-bottom.html" %}

@@ -1,0 +1,49 @@
+{% include "partials/dash-top.html" %}
+
+<div class="page">
+    
+    {% if form.errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" 
+    style="position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;">
+
+{{form.errors|escape}}
+
+
+
+
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+
+    
+<div class="registerpage loginpage container d-flex justify-content-center align-items-center">
+    <form class="col-4" method="POST">
+        {% csrf_token %}
+        <div class="mb-3 h2">
+            Login
+        </div>
+        <div class="mb-3">
+          <label for="Email1" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="username">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="Password1" class="form-label">Password</label>
+          <input type="password" class="form-control" id="Password1" name="password">
+        </div>
+        
+        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+      </form>
+</div>
+</div>
+
+
+{% include "partials/dash-bottom.html" %}
