@@ -41,5 +41,3 @@ class MyLogoutView(SuccessMessageMixin, LogoutView):
     success_url = 'users/login'
 
 
-def home(request):
-    return render(request,"users/home.html")
