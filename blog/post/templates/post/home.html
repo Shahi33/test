@@ -1,30 +1,30 @@
 {% include "partials/dash-top.html" %}
+<nav class="nav nav-pills header ">
+
+  <div class="Logo">
+      Blog
+  </div>
+  <div>
+ 
+  {% if user.is_authenticated %}
+  <a class="nav-link" href="/users/logout">Logout</a>
+  {% else %}  
+  <a class="nav-link " aria-current="page" href="/users/login">Login</a>
+  <a class="nav-link" href="/users/register">Register</a>
+
+  {%endif%}  
+  </div>
+</nav>
 
 <div class="homepage container">
 
-<nav class="nav nav-pills ">
-
-    <div>
-        Blog
-    </div>
-    <div>
-   
-    {% if user.is_authenticated %}
-    <a class="nav-link" href="/users/logout">Logout</a>
-    {% else %}  
-    <a class="nav-link active" aria-current="page" href="/users/login">Login</a>
-    <a class="nav-link" href="/users/register">Register</a>
-
-    {%endif%}  
-    </div>
-  </nav>
 
 
   <!-- create blog here -->
   {% if user.is_authenticated %}
-  <form action="{% url 'post:createBlog'  %}" method="POST">
+  <form action="{% url 'post:createBlog'  %}" method="POST" class="blog-form">
     {% csrf_token %}
-      <span class="h2" >Post your blog</span>
+      <span class="h2" >Write your blog!</span>
     <div class="form-group">
       <label for="exampleInputEmail1">Title</label>
       <input class="form-control form-control-lg" name="title" type="text" placeholder="Title here">
@@ -35,7 +35,7 @@
       </div>
     
   
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
   </form>
   {%endif%}
 
@@ -43,7 +43,7 @@
 
   <div class="row">
     {% if user.is_superuser %}
-      <h1>Non published post</h1>
+      <h2>Non published post</h2>
       {% for oneBlog in blog %}
       {% if not oneBlog.approved  %}
     <div class="col-4">
@@ -69,40 +69,74 @@
 
     {%endif%}
 
-    <h1>Published post</h1>
+    <h2>Published post</h2>
     {% for oneBlog in blog %}
     {% if oneBlog.approved %}
     
-    <div class="col-4">
+    <div class="col-4 ">
         <div class="card" >
             <div class="card-body">
-                <h5 class="card-title">{{oneBlog.title}}</h5> by {{oneBlog.author}}
-                <p>{{oneBlog.date}}</p>
-                <p class="card-text">{{oneBlog.content}}</p>
-                <div class="row">
-                    <a href="#" class="col">Like 2</a>
-                    <a href="#" class="col">Dislike 1</a>
-                </div> 
-                <div class="row">
+                <h5 class="card-title">{{oneBlog.title}}</h5> <span class="font-italic author">by {{oneBlog.author}}</span> 
+                <p class="font-italic date">{{oneBlog.date}}</p>
+                <p class="card-text content ">{{oneBlog.content}}</p>
+
+                <div class="row like-dislike ">
+                    <form method="POST" action="{% url 'post:like' oneBlog.pk %}" class="col">
+                        {%csrf_token%}
+                        <input type="hidden" name="next" value="{{request.path}}">
+                        
+                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"> 
+                          {% if request.user in oneBlog.likes.all%}
+                          <i class="fas fa-thumbs-up"><span>{{oneBlog.likes.all.count}}</span></i>
+                        {%else%}
+                        <i class="far fa-thumbs-up"><span>{{oneBlog.likes.all.count}}</span></i>
+                        {%endif%}
+                            
+                        </button>
+                    </form>
+                    <form method="POST" action="{% url 'post:dislike' oneBlog.pk %}" class="col">
+                        {%csrf_token%}
+                        <input type="hidden" name="next" value="{{request.path}}">
+                        
+                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"> 
+
+                          {% if request.user in oneBlog.dislikes.all%}
+                          <i class="fas fa-thumbs-down"><span>{{oneBlog.dislikes.all.count}}</span></i>
+                        {%else%}
+                        <i class="far fa-thumbs-down"><span>{{oneBlog.dislikes.all.count}}</span></i>
+                        {%endif%}
+                           
+                        </button>
+                    </form>
+                    <a href="" class="col more-comments">
+                      Comments
+                    </a>
+                </div>
+
+
+                <div class="row user-comment">
                   
                     {%if not oneBlog.comments.all %}
-                    No Comments Yet
+                    
+                    <p class="card-text">No Comments Yet</p> 
+                  
                     {%else%}
                     {%for comment in oneBlog.comments.all%}
-                    {% if forloop.counter < 2 %}
-                        <div class="col-6">{{comment.author}}</div>
-                        <div class="col-6">{{comment.date}}</div>
-                        <span class="col-12">{{comment}}</span>
+                    {% if forloop.counter < 3 %}
+                        <div class="col-6 author">{{comment.author}}</div>
+                        <div class="col-6 date">{{comment.date}}</div>
+                        <span class="col-12 comment">{{comment}}</span>
                         {%endif%}
                         {%endfor%}
                     {%endif%}
+                  
 
                     
                     
                 </div>   
-                <form class="row" action="{% url 'post:comment' oneBlog.id  %}" method="POST">
+                <form class="row card-text" action="{% url 'post:comment' oneBlog.id  %}" method="POST">
                     {% csrf_token %}
-                    <input class="col-8" name="comment" type="text" placeholder="Add a comment"><button class="col-4" type="submit">Post</button>
+                    <input class="col-8 " name="comment" type="text" placeholder="Add a comment"><button class="col-4 post-btn" type="submit" >Post</button>
                 </form>   
 
 

@@ -17,11 +17,13 @@ Including another URLconf
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-
+from .views import AddDislike, AddLike
 urlpatterns = [
     path('', views.home, name = 'home'),
     path('create/', views.createBlog, name = 'createBlog'),
     path('approve/<id>/', views.approveBlog, name = 'approveBlog'),
     path('comment/<id>/', views.comment, name = 'comment'),
+    path('post/<int:pk>/like/', AddLike.as_view(), name = 'like'),
+    path('post/<int:pk>/dislike/', AddDislike.as_view(), name = 'dislike'),
 
 ]

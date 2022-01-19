@@ -9,7 +9,8 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=100, unique=True)
     content = models.TextField()
     approved = models.BooleanField(default=False)
-
+    likes = models.ManyToManyField(User, blank = True, related_name='likes')
+    dislikes = models.ManyToManyField(User, blank = True, related_name='dislikes')
 
     def __str__(self):
         return self.title
@@ -23,4 +24,5 @@ class Comment(models.Model):
     
     def __str__(self):
         return self.comment
+
 

@@ -13,4 +13,91 @@
   width: 100vw;
   background-color: #5db5c0;
 }
+
+.header {
+  background: #bde9c9;
+  height: 80px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-left: 40px;
+  padding-right: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 20px;
+}
+
+.header .nav-link {
+  margin-left: 20px;
+}
+
+.header div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.blog-form {
+  margin-bottom: 20px;
+}
+
+.blog-form div {
+  margin-bottom: 10px;
+}
+
+.card-body .author {
+  font-style: italic;
+  font-size: 12px;
+}
+
+.card-body .date {
+  font-size: 12px;
+  color: gray;
+}
+
+.card-body .content {
+  text-align: justify;
+}
+
+.card-body .card-text {
+  height: 196px;
+  overflow: hidden;
+}
+
+.like-dislike {
+  margin-bottom: 10px;
+  background: #bde9c9;
+  padding: 10px 0px;
+}
+
+.like-dislike i span {
+  margin-left: 10px;
+}
+
+.post-btn {
+  border: 1px solid #59aa6f;
+  background-color: #bde9c9;
+  color: #59aa6f;
+}
+
+.user-comment {
+  margin-bottom: 10px;
+}
+
+.user-comment .author {
+  font-weight: 600;
+}
+
+.user-comment .date {
+  font-size: 10px;
+  color: gray;
+}
+
+.homepage {
+  margin-bottom: 20px;
+}
 /*# sourceMappingURL=main.css.map */
