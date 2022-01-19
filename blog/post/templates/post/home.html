@@ -85,9 +85,20 @@
                 </div> 
                 <div class="row">
                   
-                    <div class="col-6">Sabbir Shahi</div>
-                    <div class="col-6">Jan. 19, 2022, 6:29 a.m.</div>
-                    <span class="col-12">This is a comment</span>
+                    {%if not oneBlog.comments.all %}
+                    No Comments Yet
+                    {%else%}
+                    {%for comment in oneBlog.comments.all%}
+                    {% if forloop.counter < 2 %}
+                        <div class="col-6">{{comment.author}}</div>
+                        <div class="col-6">{{comment.date}}</div>
+                        <span class="col-12">{{comment}}</span>
+                        {%endif%}
+                        {%endfor%}
+                    {%endif%}
+
+                    
+                    
                 </div>   
                 <form class="row" action="{% url 'post:comment' oneBlog.id  %}" method="POST">
                     {% csrf_token %}

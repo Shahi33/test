@@ -17,7 +17,7 @@ class BlogPost(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    blog = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    blog = models.ForeignKey(BlogPost, related_name = "comments", on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     comment = models.CharField(max_length=200)
     
