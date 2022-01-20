@@ -55,10 +55,11 @@
     }
     .content{
         text-align: justify;
-    }
-    .card-text{
         height: 196px;
     overflow: hidden;
+    }
+    .card-text{
+        
     }
 }
 
@@ -93,4 +94,22 @@
 
 .homepage{
     margin-bottom: 20px;
+}
+
+
+// admin
+.header-admin{
+    background-color: #FFA500 !important;
+}
+
+.admin-links{
+    a{
+        margin-left: 10px;
+    }
+}
+
+#users, #NPB, #PB{
+    margin-bottom: 20px;
+    border-bottom: 1px solid gray;
+    padding-bottom: 10px;
 }

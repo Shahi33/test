@@ -61,9 +61,6 @@
 
 .card-body .content {
   text-align: justify;
-}
-
-.card-body .card-text {
   height: 196px;
   overflow: hidden;
 }
@@ -99,5 +96,19 @@
 
 .homepage {
   margin-bottom: 20px;
+}
+
+.header-admin {
+  background-color: #FFA500 !important;
+}
+
+.admin-links a {
+  margin-left: 10px;
+}
+
+#users, #NPB, #PB {
+  margin-bottom: 20px;
+  border-bottom: 1px solid gray;
+  padding-bottom: 10px;
 }
 /*# sourceMappingURL=main.css.map */

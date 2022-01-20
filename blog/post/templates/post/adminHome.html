@@ -1,0 +1,273 @@
+{% include "partials/dash-top.html" %}
+<nav class="nav nav-pills header header-admin ">
+
+  <div class="Logo">
+    Blog
+  </div>
+  <div class="admin-links">
+    <a href="#users">Users</a>
+    <a href="#NPB">Non Published Posts</a>
+    <a href="#PB">Published Post</a>
+  </div>
+  <div class="d-flex align-items-center">
+    <span>Hello! Admin {{user}}</span>
+
+    {% if user.is_authenticated %}
+    <a class="nav-link" href="/users/logout">Logout</a>
+    {% else %}
+    <a class="nav-link " aria-current="page" href="/users/login">Login</a>
+    <a class="nav-link" href="/users/register">Register</a>
+
+    {%endif%}
+  </div>
+</nav>
+
+<div class="homepage container">
+
+
+
+  <!-- users -->
+
+  <div id="users">
+    <h1>Users</h1>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Create User
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">User Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+        <form class="col" method="POST" action="{%url 'post:createUser'%}">
+          {% csrf_token %}
+          <div class="mb-3 h2">
+              Register
+          </div>
+          <div class="mb-3">
+            <label for="Email1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="username">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div class="mb-3">
+              <label for="Fname" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="Fname" aria-describedby="Name" name="first_name">
+              
+          </div>
+          <div class="mb-3">
+              <label for="Lname" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="Lname" name="last_name">
+              
+          </div>
+          <div class="mb-3">
+            <label for="Password1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="Password1" name="password1">
+          </div>
+          <div class="mb-3">
+              <label for="Password2" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="Password1" name="password2">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Admin</label>
+              <input type="checkbox" id="" name="is_superuser">
+            </div>
+           
+          <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+        </form>
+      </div>
+      
+     
+    
+    </div>
+  </div>
+</div>
+    {% for users in users %}
+
+    <div class="row mb-2">
+      <div class="col-1">{{forloop.counter}}</div>
+
+      <div class="col-2">{{users}}</div>
+      {%if not users.is_superuser %}
+      {% if users.is_active %}
+      <a href="{% url 'post:block' users.id%}" class="col-1"> <button class="btn btn-outline-info">Block</button>
+      </a>
+      {%else%}
+    
+      <a href="{% url 'post:block' users.id %}" class="col-1"> <button class="btn btn-outline-primary">Unblock</button>
+      </a>
+      {%endif%}
+      <a href="{% url 'post:delete' users.id %}" class="col-1"> <button class="btn btn-danger">Delete</button> </a>
+      {%else%}
+      <button class="btn btn-primary col-1" style="cursor: not-allowed;">Admin</button>
+      {%endif%}
+    </div>
+    {%endfor%}
+  </div>
+
+  <!-- show blog here -->
+
+  <div class="row" id="NPB">
+    {% if user.is_superuser %}
+
+
+    <h2>Non published post</h2>
+    {% for oneBlog in blog %}
+    {% if not oneBlog.approved  %}
+    <div class="col-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{oneBlog.title}}</h5> by {{oneBlog.author}}
+          <p>{{oneBlog.date}}</p>
+          <p class="card-text content">{{oneBlog.content}}</p>
+          <a href="{% url 'post:singleBlog' oneBlog.id %}">
+            <button class="btn btn-primary  mb-2">Read More</button>
+          </a>
+
+          {% if user.is_superuser %}
+          {% if oneBlog.approved %}
+          <a href="{% url 'post:approveBlog' oneBlog.id  %}" class="card-link"><button
+              class="btn btn-primary  mb-2">Disapprove Blog</button></a>
+          {%else%}
+          <a href="{% url 'post:approveBlog' oneBlog.id  %}" class="card-link"><button
+              class="btn btn-success  mb-2">Approve Blog</button></a>
+          {%endif%}
+          <a href="{% url 'post:postDelete' oneBlog.id  %}" class="card-link"><button
+            class="btn btn-danger  mb-2">Delete</button></a>
+          {%endif%}
+        </div>
+      </div>
+
+    </div>
+
+    {%endif%}
+    {%endfor%}
+
+    {%endif%}
+  </div>
+
+  <div class="row" id="PB">
+    <h2>Published post</h2>
+    {% for oneBlog in blog %}
+    {% if oneBlog.approved %}
+
+    <div class="col-4 mb-2">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{oneBlog.title}}</h5> <span class="font-italic author">by
+            {{oneBlog.author}}</span>
+          <p class="font-italic date">{{oneBlog.date}}</p>
+          <p class="card-text content ">{{oneBlog.content}}</p>
+
+          <a href="{% url 'post:singleBlog' oneBlog.id %}">
+            <button class="btn btn-primary  mb-2">Read More</button>
+          </a>
+
+          {% if user.is_superuser %}
+          {% if oneBlog.approved %}
+          <a href="{% url 'post:approveBlog' oneBlog.id  %}" class="card-link"><button
+              class="btn btn-info mb-2">Disapprove Blog</button></a>
+          {%else%}
+          <a href="{% url 'post:approveBlog' oneBlog.id  %}" class="card-link"><button
+              class="btn btn-success  mb-2">Approve Blog</button></a>
+          {%endif%}
+          <a href="{% url 'post:postDelete' oneBlog.id  %}" class="card-link"><button
+            class="btn btn-danger  mb-2">Delete</button></a>
+          {%endif%}
+
+          <div class="row like-dislike ">
+            <form method="POST" action="{% url 'post:like' oneBlog.pk %}" class="col">
+              {%csrf_token%}
+              <input type="hidden" name="next" value="{{request.path}}">
+
+              <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                {% if request.user in oneBlog.likes.all%}
+                <i class="fas fa-thumbs-up"><span>{{oneBlog.likes.all.count}}</span></i>
+                {%else%}
+                <i class="far fa-thumbs-up"><span>{{oneBlog.likes.all.count}}</span></i>
+                {%endif%}
+
+              </button>
+            </form>
+            <form method="POST" action="{% url 'post:dislike' oneBlog.pk %}" class="col">
+              {%csrf_token%}
+              <input type="hidden" name="next" value="{{request.path}}">
+
+              <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+
+                {% if request.user in oneBlog.dislikes.all%}
+                <i class="fas fa-thumbs-down"><span>{{oneBlog.dislikes.all.count}}</span></i>
+                {%else%}
+                <i class="far fa-thumbs-down"><span>{{oneBlog.dislikes.all.count}}</span></i>
+                {%endif%}
+
+              </button>
+            </form>
+            <a href="" class="col more-comments">
+              Comments
+            </a>
+          </div>
+
+
+          <div class="row user-comment">
+
+            {%if not oneBlog.comments.all %}
+
+            <p class="card-text">No Comments Yet</p>
+
+            {%else%}
+            {%for comment in oneBlog.comments.all%}
+            {% if forloop.counter < 3 %}
+            <div class="col-6 author">{{comment.author}}</div>
+            <div class="col-6 date">{{comment.date}}</div>
+            <span class="col-12 comment">{{comment}}</span>
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+
+
+
+
+          </div>
+          <form class="row card-text" action="{% url 'post:comment' oneBlog.id  %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{request.path}}">
+            <input class="col-8 " name="comment" type="text" placeholder="Add a comment"><button class="col-4 post-btn"
+              type="submit">Post</button>
+          </form>
+
+
+
+
+
+          
+        </div>
+      </div>
+    </div>
+
+
+    {%endif%}
+    {%endfor%}
+
+
+
+  </div>
+
+
+</div>
+
+
+
+
+
+
+{% include "partials/dash-bottom.html" %}

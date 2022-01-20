@@ -1,0 +1,95 @@
+{% include "partials/dash-top.html" %}
+
+<nav class="nav nav-pills header ">
+
+    <div class="Logo">
+        Blog
+    </div>
+    <div class="d-flex align-items-center">
+      <span>Hello! {{user}}</span>
+    
+    {% if user.is_authenticated %}
+    <a class="nav-link" href="/users/logout">Logout</a>
+    {% else %}  
+    <a class="nav-link " aria-current="page" href="/users/login">Login</a>
+    <a class="nav-link" href="/users/register">Register</a>
+  
+    {%endif%}  
+    </div>
+  </nav>
+
+
+  <!-- container -->
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col-12"><h1>{{post.title}}</h1></div>
+             
+                <p class="col-12"style="text-align:justify;">{{post.content}}</p>
+            </div>
+        </div>
+        <div class="col-4" style="border-left: 1px solid gray ;">
+
+            <h2>Comments</h2>
+            <div class="row like-dislike ">
+                <form method="POST" action="{% url 'post:like' post.pk %}" class="col">
+                    {%csrf_token%}
+                    <input type="hidden" name="next" value="{{request.path}}">
+                    
+                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"> 
+                      {% if request.user in post.likes.all%}
+                      <i class="fas fa-thumbs-up"><span>{{post.likes.all.count}}</span></i>
+                    {%else%}
+                    <i class="far fa-thumbs-up"><span>{{post.likes.all.count}}</span></i>
+                    {%endif%}
+                        
+                    </button>
+                </form>
+                <form method="POST" action="{% url 'post:dislike' post.pk %}" class="col">
+                    {%csrf_token%}
+                    <input type="hidden" name="next" value="{{request.path}}">
+                    
+                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit"> 
+
+                      {% if request.user in post.dislikes.all%}
+                      <i class="fas fa-thumbs-down"><span>{{post.dislikes.all.count}}</span></i>
+                    {%else%}
+                    <i class="far fa-thumbs-down"><span>{{post.dislikes.all.count}}</span></i>
+                    {%endif%}
+                       
+                    </button>
+                </form>
+            
+            </div>
+
+
+            {% for comment in comment %}
+            <div class="mb-2">
+                <span style="font-weight: 600;">{{comment.author}}</span>
+                <span style="font-style: italic; font-size: 10px; color: gray;">{{comment.date}}</span>
+                <br>
+              
+                <span>{{comment}}</span>
+                <hr>
+            </div>
+
+         
+
+            {%endfor%}
+
+            <form class="" action="{% url 'post:comment' post.id  %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{request.path}}">
+
+                <input class="col-8 " name="comment" type="text" placeholder="Add a comment"><button class="col-4 post-btn" type="submit" >Post</button>
+            </form>  
+        </div>
+    </div>
+</div>
+
+
+
+
+{% include "partials/dash-bottom.html" %}
+

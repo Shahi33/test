@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .forms import UserRegistration
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 
@@ -30,11 +31,32 @@ def register(request):
 # Login views
 class MyLoginView(SuccessMessageMixin, LoginView):
     template_name = 'users/login.html'
-    success_url = '/'
+
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
-        return context   
+        if user.is_superuser:
+            success_url = 'admin/'
+        else:
+            success_url = '/'
+        return context  
+
+
+def myLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.is_superuser:
+                return redirect('post:adminHome')
+            else:
+                return redirect('post:home')
+            
+        else: 
+            return HttpResponse("Incorrect Details")
+    return render(request,"users/login.html")
 
 class MyLogoutView(SuccessMessageMixin, LogoutView):
     template_name = 'users/login.html'
